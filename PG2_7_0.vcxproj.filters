@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="List">
+      <UniqueIdentifier>{fcc63fd1-8e9e-4e4b-aaf8-7acc6a3b5967}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="List\Data">
+      <UniqueIdentifier>{012bd95a-424f-421a-9403-56405a1ea4b3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="List\Data\Data.h">
+      <Filter>List\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="List\List.h">
+      <Filter>List</Filter>
+    </ClInclude>
+    <ClInclude Include="List\Data\Iterator.h">
+      <Filter>List\Data</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
