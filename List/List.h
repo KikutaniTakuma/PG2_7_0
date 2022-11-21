@@ -10,18 +10,21 @@ public:
 	/// <summary>
 	/// 規定コンストラクタ
 	/// </summary>
-	inline List() {
+	inline List()
+		:size(0)
+	{
 		front = new Data<T>;
 		back = front;
-		size = 1;
+		size++;
 	}
 	
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	/// <param name="...data">入れたいデータ(可変個)</param>
-	inline List(std::initializer_list<T> data) {
-		size = 0;
+	/// <param name="data">入れたいデータ(可変個)</param>
+	inline List(std::initializer_list<T> data)
+		:size(0)
+	{
 		for (auto&& i : data) {
 			if (size == 0) {
 				front = new Data<T>(i);
@@ -108,7 +111,7 @@ public:
 	/// 要素数を返す
 	/// </summary>
 	/// <returns>要素数</returns>
-	inline size_t Size() const {
+	inline const size_t& Size() const {
 		return size;
 	}
 
@@ -199,10 +202,14 @@ public:
 	///
 
 	/// <summary>
-	/// 一番前の要素を削除
+	///  一番前の要素を削除
 	/// </summary>
-	inline void PopFront() {
+	/// <returns>消した要素のデータ</returns>
+	inline const T& PopFront() {
 		size--;
+
+		// 消す要素のデータを格納
+		T data = front->data;
 
 		// bufに一番前の一つ後のポインタを代入
 		Data<T>* buf = front->next;
@@ -215,9 +222,11 @@ public:
 
 		// 消した要素の一つ後のポインタを代入
 		front = buf;
-
 		
 		front->before = nullptr;
+
+		// 最後に格納した要素をreturn
+		return data;
 	}
 
 	/// <summary>
@@ -225,9 +234,9 @@ public:
 	/// 要素数を超えていた場合一番後ろを削除
 	/// </summary>
 	/// <param name="index">消したい要素番号</param>
-	inline void Pop(const size_t& index) {
+	inline const T& Pop(const size_t& index) {
 		if (index >= size) {
-			this->PopBack();
+			return this->PopBack();
 		}
 		else {
 			size--;
@@ -237,6 +246,9 @@ public:
 			for (int i = 0; i < index && buf->next != nullptr; i++) {
 				buf = buf->next;
 			}
+
+			// 消す要素のデータを格納
+			T data = buf->data;
 
 			// bufの前の要素の次のポインタをbufの次の要素のポインタに代入
 			if (buf->before != nullptr) {
@@ -248,14 +260,20 @@ public:
 			}
 
 			delete buf;
+
+			// 最後に格納した要素をreturn
+			return data;
 		}
 	}
 
 	/// <summary>
 	/// 後ろの要素を削除
 	/// </summary>
-	inline void PopBack() {
+	inline const T& PopBack() {
 		size--;
+
+		// 消す要素のデータを格納
+		T data = back->data;
 
 		// bufに一番後ろの一つ前のポインタを代入
 		Data<T>* buf = back->before;
@@ -271,6 +289,9 @@ public:
 
 		// 消した要素のdeleteしたバグった値が入ってるのでヌルポインタを代入
 		back->next = nullptr;
+
+		// 最後に格納した要素をreturn
+		return data;
 	}
 
 private:
