@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <initializer_list>
 
+#include <iostream>
+
 template<class T>
 class List {
 public:
@@ -19,12 +21,10 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	/// <typeparam name="...A"></typeparam>
-	/// <param name="...data">入れたいデータ(可変長)</param>
-	template<class... A>
-	inline List(A... data) {
+	/// <param name="...data">入れたいデータ(可変個)</param>
+	inline List(std::initializer_list<T> data) {
 		size = 0;
-		for (T i : std::initializer_list<T>{ data... }) {
+		for (auto&& i : data) {
 			if (size == 0) {
 				front = new Data<T>(i);
 				back = front;
@@ -137,6 +137,8 @@ public:
 		if (p != nullptr) {
 			p->before = buf->next;
 		}
+
+		size++;
 	}
 
 	/// <summary>
@@ -165,7 +167,7 @@ public:
 	/// </summary>
 	/// <param name="index">参照したい要素番号</param>
 	/// <returns>任意の要素の参照</returns>
-	inline T& operator[](const size_t& index) const{
+	inline Data<T>& operator[](const size_t& index) const{
 		Data<T>* buf = this->front;
 
 		for (int i = 0; i < index && buf->next != nullptr; i++) {
@@ -173,7 +175,7 @@ public:
 		}
 
 		assert(buf != nullptr);
-		return buf->data;
+		return *buf;
 	}
 
 	/// <summary>
