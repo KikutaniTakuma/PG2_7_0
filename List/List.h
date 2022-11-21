@@ -4,8 +4,6 @@
 #include <assert.h>
 #include <initializer_list>
 
-#include <iostream>
-
 template<class T>
 class List {
 public:
@@ -49,6 +47,25 @@ public:
 		} while (bufNext != nullptr);
 	}
 
+
+
+	/// <summary>
+	/// 各要素を参照
+	/// </summary>
+	/// <param name="index">参照したい要素番号</param>
+	/// <returns>任意の要素の参照</returns>
+	inline T& operator[](const size_t& index) const {
+		Data<T>* buf = this->front;
+
+		for (int i = 0; i < index && buf->next != nullptr; i++) {
+			buf = buf->next;
+		}
+
+		assert(buf != nullptr);
+		return buf->data;
+	}
+
+
 	/// <summary>
 	/// 要素数を変更
 	/// </summary>
@@ -86,6 +103,20 @@ public:
 		}
 		front->data = T();
 	}
+
+	/// <summary>
+	/// 要素数を返す
+	/// </summary>
+	/// <returns>要素数</returns>
+	inline size_t Size() const {
+		return size;
+	}
+
+
+
+	///
+	/// 要素追加
+	/// 
 
 	/// <summary>
 	/// 前に要素追加
@@ -162,29 +193,10 @@ public:
 		size++;
 	}
 
-	/// <summary>
-	/// 各要素を参照
-	/// </summary>
-	/// <param name="index">参照したい要素番号</param>
-	/// <returns>任意の要素の参照</returns>
-	inline Data<T>& operator[](const size_t& index) const{
-		Data<T>* buf = this->front;
 
-		for (int i = 0; i < index && buf->next != nullptr; i++) {
-			buf = buf->next;
-		}
-
-		assert(buf != nullptr);
-		return *buf;
-	}
-
-	/// <summary>
-	/// 要素数を返す
-	/// </summary>
-	/// <returns>要素数</returns>
-	inline size_t Size() const {
-		return size;
-	}
+	///
+	/// 要素削除
+	///
 
 	/// <summary>
 	/// 一番前の要素を削除
@@ -262,9 +274,18 @@ public:
 	}
 
 private:
+	/// <summary>
+	/// 要素数
+	/// </summary>
 	size_t size;
 
+	/// <summary>
+	/// 前方向のhead
+	/// </summary>
 	Data<T>* front;
 
+	/// <summary>
+	/// 後方向のhead
+	/// </summary>
 	Data<T>* back;
 };
