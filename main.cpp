@@ -15,7 +15,7 @@ struct Sushi
 };
 
 int main() {
-	List<Sushi> hoge;
+	List<Sushi> list;
 
 	Sushi buf;
 
@@ -31,14 +31,14 @@ int main() {
 	cin >> buf.plice;
 	cout << endl;
 
-	hoge[0] = buf;
+	list[0] = buf;
 
 	printf(" | rank | 前のアドレス｜寿司ネタ | 値段 |   アドレス　 | 次のアドレス | \n");
 	printf("------------------------------------------------------------------------\n");
 
-	for (int i = 0; i < hoge.Size(); i++) {
+	for (int i = 0; i < list.Size(); i++) {
 		printf(" | %4d | %.12x｜%8s | %4d | %.12x | %.12x | \n\n\n", 
-			      hoge[i].data.rank, hoge[i].before, hoge[i].data.neta.c_str(), hoge[i].data.plice, &hoge[i], hoge[i].next);
+			      list[i].data.rank, list[i].before, list[i].data.neta.c_str(), list[i].data.plice, &list[i], list[i].next);
 	}
 	cout << endl;
 
@@ -61,14 +61,14 @@ int main() {
 		cin >> buf.plice;
 		cout << endl;
 
-		hoge.Push(buf, buf.rank - 2);
+		list.Push(buf, buf.rank - 2);
 
 		printf(" | rank | 前のアドレス｜寿司ネタ | 値段 |   アドレス　 | 次のアドレス | \n");
 		printf("------------------------------------------------------------------------\n");
 
-		for (int i = 0; i < hoge.Size(); i++) {
+		for (int i = 0; i < list.Size(); i++) {
 			printf(" | %4d | %.12x｜%8s | %4d | %.12x | %.12x |\n",
-				hoge[i].data.rank, hoge[i].before, hoge[i].data.neta.c_str(), hoge[i].data.plice, &hoge[i], hoge[i].next);
+				list[i].data.rank, list[i].before, list[i].data.neta.c_str(), list[i].data.plice, &list[i], list[i].next);
 		}
 		cout << endl;
 	}
