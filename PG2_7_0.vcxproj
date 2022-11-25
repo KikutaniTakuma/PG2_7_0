@@ -23,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="List\Data\Data.h" />
+    <ClInclude Include="List\DataIterator.h" />
     <ClInclude Include="List\List.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

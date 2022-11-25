@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Data/Data.h"
+#include "DataIterator.h"
 #include <assert.h>
 #include <initializer_list>
 
@@ -292,6 +293,15 @@ public:
 
 		// ÅŒã‚ÉŠi”[‚µ‚½—v‘f‚ğreturn
 		return data;
+	}
+
+
+	inline DataItarator<T> begin() {
+		return  DataItarator<T>(front);
+	}
+
+	inline  DataItarator<T> end() {
+		return  DataItarator<T>(back);
 	}
 
 private:

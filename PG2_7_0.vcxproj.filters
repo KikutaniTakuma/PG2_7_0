@@ -18,5 +18,8 @@
     <ClInclude Include="List\List.h">
       <Filter>List</Filter>
     </ClInclude>
+    <ClInclude Include="List\DataIterator.h">
+      <Filter>List</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
