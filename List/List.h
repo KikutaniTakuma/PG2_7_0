@@ -15,12 +15,8 @@ public:
 		:size(0),
 		front(nullptr),
 		back(nullptr)
-	{
-		front = new Data<T>;
-		back = front;
-		size++;
-	}
-	
+	{}
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -61,13 +57,15 @@ public:
 	/// デストラクタ
 	/// </summary>
 	inline ~List() {
-		Data<T>* buf = front;
-		Data<T>* bufNext;
-		do {
-			bufNext = buf->next;
-			delete buf;
-			buf = bufNext;
-		} while (bufNext != nullptr);
+		if (front) {
+			Data<T>* buf = front;
+			Data<T>* bufNext;
+			do {
+				bufNext = buf->next;
+				delete buf;
+				buf = bufNext;
+			} while (bufNext != nullptr);
+		}
 	}
 
 
@@ -79,6 +77,7 @@ public:
 	/// <returns>任意の要素の参照</returns>
 	inline T& operator[](const size_t& index) const {
 		Data<T>* buf = this->front;
+		assert(buf != nullptr);
 
 		for (int i = 0; i < index; i++) {
 			buf = buf->next;
@@ -93,14 +92,12 @@ public:
 	/// </summary>
 	/// <param name="tmp">代入したいリスト</param>
 	/// <returns>代入したものを返す</returns>
-	inline const List<T>& operator=(const List<T>& tmp){
+	inline const List<T>& operator=(const List<T>& tmp) {
 		this->Clear();
 
 		for (auto& i : tmp) {
 			this->PushBack(i);
 		}
-
-		this->PopFront();
 
 		return *this;
 	}
@@ -110,6 +107,12 @@ public:
 	/// </summary>
 	/// <param name="index">任意の要素数</param>
 	inline void ReSize(const size_t& index) {
+		if (size == 0) {
+			front = new Data<T>;
+			back = front;
+			size++;
+		}
+
 		if (index == size) {
 			return;
 		}
@@ -137,14 +140,10 @@ public:
 	/// 要素を一つにして初期化
 	/// </summary>
 	inline void Clear() {
-		if (size == 0) {
-			return;
-		}
-
-		while (size > 1) {
+		while (size > 0) {
 			this->PopBack();
 		}
-		front->data = T();
+		front = nullptr;
 	}
 
 	/// <summary>
@@ -155,6 +154,58 @@ public:
 		return size;
 	}
 
+	/// <summary>
+	/// <para>要素の昇順ソート</para>
+	/// <para>ヒープソート</para>
+	/// </summary>
+	inline void Sort() {
+		size_t i;
+
+		for (i = (size - 1) / 2; i >= 1; i--) {
+			Heap(i, size - 1);
+		}
+		for (i = (size - 1); i >= 2; i--) {
+			SortSwap((*this)[1], (*this)[i]);
+			Heap(1, i - 1);
+		}
+	}
+
+	/// <summary>
+	/// データの交換
+	/// </summary>
+	/// <param name="x">交換したいデータの要素番号</param>
+	/// <param name="y">交換したいデータの要素番号2</param>
+	inline void Swap(const size_t& x, const size_t& y) {
+		T tmp = (*this)[x];
+		(*this)[x] = (*this)[y];
+		(*this)[y] = tmp;
+	}
+
+private:
+	// ソート用関数
+
+	inline void SortSwap(T& x, T& y) {
+		T tmp = x;
+		x = y;
+		y = tmp;
+	}
+
+	inline void Heap(const size_t& first, const size_t& last) {
+		size_t parent = first;
+		size_t child = 2 * parent;
+		while (child <= last) {
+			if (child < last && (*this)[child] < (*this)[child + 1]) {
+				child++;
+			}
+			if ((*this)[child] <= (*this)[parent]) { break; }
+			SortSwap((*this)[child], (*this)[parent]);
+			parent = child;
+			child = 2 * parent;
+		}
+	}
+
+
+public:
 
 
 	///
@@ -166,6 +217,13 @@ public:
 	/// </summary>
 	/// <param name="data">追加した要素に入れるデータ</param>
 	inline void PushFront(const T& data) {
+		if (size == 0) {
+			front = new Data<T>(data);
+			back = front;
+			size++;
+			return;
+		}
+
 		//  一番前の要素のポインタを代入
 		Data<T>* buf = front;
 
@@ -189,6 +247,13 @@ public:
 	/// <param name="data">追加した要素に入れるデータ</param>
 	/// <param name="index">どこの次に挿入させるか</param>
 	inline void Push(const T& data, const size_t& index) {
+		if (size == 0) {
+			front = new Data<T>(data);
+			back = front;
+			size++;
+			return;
+		}
+
 		Data<T>* buf = this->front;
 
 		for (int i = 0; i < index && buf->next != nullptr; i++) {
@@ -220,6 +285,14 @@ public:
 	/// </summary>
 	/// <param name="num">追加した要素に入れるデータ</param>
 	inline void PushBack(const T& data) {
+		if (size == 0) {
+			front = new Data<T>(data);
+			back = front;
+			size++;
+			return;
+		}
+
+
 		//  一番後ろの要素のポインタを代入
 		Data<T>* buf = back;
 
@@ -246,6 +319,10 @@ public:
 	/// </summary>
 	/// <returns>消した要素のデータ</returns>
 	inline const T& PopFront() {
+		if (size == 0) {
+			return T();
+		}
+
 		size--;
 
 		// 消す要素のデータを格納
@@ -262,8 +339,8 @@ public:
 
 		// 消した要素の一つ後のポインタを代入
 		front = buf;
-		
-		front->before = nullptr;
+
+		if (front) { front->before = nullptr; }
 
 		// 最後に格納した要素をreturn
 		return data;
@@ -275,6 +352,10 @@ public:
 	/// </summary>
 	/// <param name="index">消したい要素番号</param>
 	inline const T& Pop(const size_t& index) {
+		if (size == 0) {
+			return T();
+		}
+
 		if (index >= size) {
 			return this->PopBack();
 		}
@@ -310,6 +391,10 @@ public:
 	/// 後ろの要素を削除
 	/// </summary>
 	inline const T& PopBack() {
+		if (size == 0) {
+			return T();
+		}
+
 		size--;
 
 		// 消す要素のデータを格納
@@ -328,7 +413,7 @@ public:
 		back = buf;
 
 		// 消した要素のdeleteしたバグった値が入ってるのでヌルポインタを代入
-		back->next = nullptr;
+		if (back) { back->next = nullptr; }
 
 		// 最後に格納した要素をreturn
 		return data;
@@ -343,7 +428,7 @@ public:
 	/// 最初の要素のイテレータを返す
 	/// </summary>
 	/// <returns>最初の要素のイテレータ</returns>
-	inline DataItarator<T> begin() const{
+	inline DataItarator<T> begin() const {
 		return DataItarator<T>(front);
 	}
 
@@ -351,7 +436,7 @@ public:
 	/// 最後の要素のイテレータを返す
 	/// </summary>
 	/// <returns>最後の要素のイテレータ</returns>
-	inline DataItarator<T> end() const{
+	inline DataItarator<T> end() const {
 		return DataItarator<T>(back);
 	}
 
