@@ -9,11 +9,14 @@ using std::endl;
 
 int main() {
 	
-	List<int> hoge = {100,200,300,400,500,600,700};
-
-	hoge.PushBack(800);
+	List<int> hoge = { 100,200,300,400,500,600,700 };
+	List<int> hage = hoge;
 
 	for (auto& i : hoge) {
+		cout << i << endl;
+	}
+
+	for (auto& i : hage) {
 		cout << i << endl;
 	}
 

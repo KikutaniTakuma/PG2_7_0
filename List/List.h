@@ -43,6 +43,21 @@ public:
 	}
 
 	/// <summary>
+	/// コピーコンストラクタ
+	/// </summary>
+	/// <param name="tmp">代入したいリスト</param>
+	inline List(const List<T>& tmp)
+		:size(0),
+		front(nullptr),
+		back(nullptr)
+	{
+		front = new Data<T>;
+		back = front;
+		size++;
+		*this = tmp;
+	}
+
+	/// <summary>
 	/// デストラクタ
 	/// </summary>
 	inline ~List() {
@@ -62,17 +77,33 @@ public:
 	/// </summary>
 	/// <param name="index">参照したい要素番号</param>
 	/// <returns>任意の要素の参照</returns>
-	inline T& operator[](const size_t& index) {
+	inline T& operator[](const size_t& index) const {
 		Data<T>* buf = this->front;
 
-		for (int i = 0; i < index && buf->next != nullptr; i++) {
+		for (int i = 0; i < index; i++) {
 			buf = buf->next;
-		}
 
-		assert(buf != nullptr);
+			assert(buf != nullptr);
+		}
 		return buf->data;
 	}
 
+	/// <summary>
+	/// リストの代入
+	/// </summary>
+	/// <param name="tmp">代入したいリスト</param>
+	/// <returns>代入したものを返す</returns>
+	inline const List<T>& operator=(const List<T>& tmp){
+		this->Clear();
+
+		for (auto& i : tmp) {
+			this->PushBack(i);
+		}
+
+		this->PopFront();
+
+		return *this;
+	}
 
 	/// <summary>
 	/// 要素数を変更
@@ -106,6 +137,10 @@ public:
 	/// 要素を一つにして初期化
 	/// </summary>
 	inline void Clear() {
+		if (size == 0) {
+			return;
+		}
+
 		while (size > 1) {
 			this->PopBack();
 		}
