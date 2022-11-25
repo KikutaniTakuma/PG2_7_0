@@ -13,7 +13,7 @@ int main() {
 
 	hoge.PushBack(800);
 
-	for (auto i : hoge) {
+	for (auto& i : hoge) {
 		cout << i << endl;
 	}
 

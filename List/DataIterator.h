@@ -31,5 +31,6 @@ public:
 		return this->pos == ite.pos;
 	}
 
+private:
 	Data<T>* pos;
 };
