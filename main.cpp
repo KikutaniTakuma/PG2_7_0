@@ -17,8 +17,6 @@ int main() {
 		cout << i << endl;
 	}
 
-
-
 	std::string endProgram;
 	do {
 		cout << "I—¹‚·‚é‚É‚Í”š‚ğ“ü—Í‚µ‚ÄEnterƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢" << endl;

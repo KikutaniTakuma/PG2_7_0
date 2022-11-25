@@ -12,7 +12,9 @@ public:
 	/// 規定コンストラクタ
 	/// </summary>
 	inline List()
-		:size(0)
+		:size(0),
+		front(nullptr),
+		back(nullptr)
 	{
 		front = new Data<T>;
 		back = front;
@@ -24,7 +26,9 @@ public:
 	/// </summary>
 	/// <param name="data">入れたいデータ(可変個)</param>
 	inline List(std::initializer_list<T> data)
-		:size(0)
+		:size(0),
+		front(nullptr),
+		back(nullptr)
 	{
 		for (auto&& i : data) {
 			if (size == 0) {
@@ -58,7 +62,7 @@ public:
 	/// </summary>
 	/// <param name="index">参照したい要素番号</param>
 	/// <returns>任意の要素の参照</returns>
-	inline T& operator[](const size_t& index) const {
+	inline T& operator[](const size_t& index) {
 		Data<T>* buf = this->front;
 
 		for (int i = 0; i < index && buf->next != nullptr; i++) {
@@ -73,8 +77,8 @@ public:
 	/// <summary>
 	/// 要素数を変更
 	/// </summary>
-	/// <param name="index">いくつに変更したいか</param>
-	inline void Resize(const size_t& index) {
+	/// <param name="index">任意の要素数</param>
+	inline void ReSize(const size_t& index) {
 		if (index == size) {
 			return;
 		}
@@ -296,12 +300,24 @@ public:
 	}
 
 
-	inline DataItarator<T> begin() {
-		return  DataItarator<T>(front);
+	///
+	/// beginとend関数
+	/// 
+
+	/// <summary>
+	/// 最初の要素のイテレータを返す
+	/// </summary>
+	/// <returns>最初の要素のイテレータ</returns>
+	inline DataItarator<T> begin() const{
+		return DataItarator<T>(front);
 	}
 
-	inline  DataItarator<T> end() {
-		return  DataItarator<T>(back);
+	/// <summary>
+	/// 最後の要素のイテレータを返す
+	/// </summary>
+	/// <returns>最後の要素のイテレータ</returns>
+	inline DataItarator<T> end() const{
+		return DataItarator<T>(back);
 	}
 
 private:
